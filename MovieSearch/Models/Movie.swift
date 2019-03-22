@@ -38,10 +38,5 @@ struct Movie: Codable {
 }
 
 struct MovieTopLevelDictionary: Codable {
-    
-    enum CodingKeys: String, CodingKey {
-        case results = "results"
-    }
-    
     let results: [Movie]
 }
