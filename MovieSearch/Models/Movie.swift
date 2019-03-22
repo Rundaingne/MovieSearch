@@ -15,7 +15,7 @@
 
 //1dbae9c4649709053b9777d147a48d9f -- my api Key.
 
-//my baseURL = "https://api.themoviedb.org/3/discover/movie"
+//my baseURL = "https://api.themoviedb.org/3/search/movie"
 
 import Foundation
 
