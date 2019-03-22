@@ -5,50 +5,59 @@
 //  Created by Brooke Kumpunen on 3/22/19.
 //  Copyright © 2019 Rund LLC. All rights reserved.
 //
+//Alrighty, got my models working. Let's put it all into the views now and see if it's going to work.
 
 import UIKit
 
 class MovieListTableViewController: UITableViewController {
-
+    
+    //MARK: - Outlets
+    @IBOutlet weak var movieSearchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        movieSearchBar.delegate = self
+        //Last thing. I'll need to be able to fetch movies and send them into the movies array below. I will call fetchMovies here.
+        getMovies()
+        
     }
-
+    
+    //MARK: - Methods
+    func getMovies() {
+        guard let searchTerm = movieSearchBar.text else {return}
+        MovieController.shared.searchMovies(with: searchTerm) { (movie) in
+            self.movies = movie
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    //MARK: - Properties
+    var movies: [Movie] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    //MARK: - Methods
+    
+    
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        // In order to complete this, I need to know the number of movies I have displayng. So I'll need a source of truth here.
+        return movies.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! movieTableViewCell
+        let movie = movies[indexPath.row]
+        cell.movie = movie
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
 
     /*
     // Override to support editing the table view.
@@ -63,21 +72,6 @@ class MovieListTableViewController: UITableViewController {
     */
 
     /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -87,4 +81,16 @@ class MovieListTableViewController: UITableViewController {
     }
     */
 
+}
+
+//I do not need a segue, or the delete functions. However, when I finish the main functionality, I can try to come back on a different branch and see if I can add in another tableView with movie detail. dunno about delete, unless I made a category of favorite movies or something. Whoa.
+
+
+//In order to use the searchBar fancy features, I'll need to make this the delegate for the searchbar class.
+extension MovieListTableViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        MovieController.shared.searchMovies(with: searchText) { (movies) in
+            self.movies = movies
+        }
+    }
 }

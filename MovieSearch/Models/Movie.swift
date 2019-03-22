@@ -31,12 +31,17 @@ struct Movie: Codable {
     }
     
     let movieName: String
-    let rating: Int
+    let rating: Double
     let movieImagePath: String
     let overview: String
     
 }
 
 struct MovieTopLevelDictionary: Codable {
+    
+    enum CodingKeys: String, CodingKey {
+        case results = "results"
+    }
+    
     let results: [Movie]
 }

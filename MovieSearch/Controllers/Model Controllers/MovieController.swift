@@ -7,7 +7,7 @@
 //
 //Here I need to create my baseURL, do my queryItems, create a URL request, and pull the data down from the API. Since I am doing codable, I will make my completions contain my source of truth.
 
-import Foundation
+import UIKit
 
 class MovieController {
     
@@ -24,7 +24,7 @@ class MovieController {
         guard let url = baseURL else {completion([]); return}
         var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
         let apiKeyQueryItem = URLQueryItem(name: "api_key", value: "1dbae9c4649709053b9777d147a48d9f")
-        let querySearchItem = URLQueryItem(name: "&query", value: searchTerm)
+        let querySearchItem = URLQueryItem(name: "query", value: searchTerm)
         urlComponents?.queryItems = [apiKeyQueryItem, querySearchItem]
         //Jimminy that was hard to decipher. Okay, got my query items and my full url is below.
         guard let requestURL = urlComponents?.url else {completion([]); return}
@@ -53,4 +53,5 @@ class MovieController {
     }
     
     //I will need to create a function to getImages here. But I will do that in a bit, after the I know the rest of the app is working.
+   
 }
